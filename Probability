@@ -1,86 +1,120 @@
-def add_employee():
-    global employees
-    try:
-        emp_id = int(input("Enter Employee ID: "))
-        if emp_id in employees:
-            print ("Employee ID already exists. Enter another value.\n")
-            return
+import random
 
-        name= input("Enter Name: ").strip()
-        age= int(input("Enter Age: "))
-        department= input("Enter Department: ").strip()
-        salary= float(input("Enter Salary: "))
+def simulate_coin_tosses(n=10000):
+    heads = 0
+    for _ in range(n):
+        if random.choice(['H', 'T']) == 'H':
+            heads += 1
+    tails = n - heads
+    print(f"Probability of Heads: {heads/n}")
+    print(f"Probability of Tails: {tails/n}")
 
-        employees[emp_id]= {
-            'name': name,
-            'age': age,
-            'department' : department,
-            'salary' : salary
-        }
+simulate_coin_tosses()
 
-        print(f" Employee '{name}' added successfully.\n")
-    except ValueError:
-        print ("Invalid Input, please enter correct values")
+#This will simulate tossing a coin 10,000 times using random choices, and counts how often heads or tails will appear to finally calculate the experimental probability.
 
 
-def view_employees():
-    global employees
-    if not employees:
-        print("No employees available.|N")
-        return
+def simulate_dice_rolls(trials=10000):
+    count_sum_7 = 0
+    for _ in range(trials):
+        die1 = random.randint(1, 6)
+        die2 = random.randint(1, 6)
+        if die1 + die2 == 7:
+            count_sum_7 += 1
+    print(f"Probability of sum = 7: {count_sum_7/trials}")
 
-    print("\n{:<10} {:<15} {:<5} {:<15} {:<10}".format('ID', 'Name', 'Age', 'Department', 'Salary'))
-    print("-" * 60)
+simulate_dice_rolls()
 
-    for emp_id, info in employees.items():
-        print("{:<10} {:<15} {:<5} {:<15} {:<10}".format(
-            emp_id, info['name'], info['age'], info['department'], info['salary']))
+#Rolls two dice repeatedly and counts how many times the sum is 7.
 
-        print()
 
-        
-def search_employees():
-    global employees
-    try:
-        emp_id = int(input("Enter Employee ID to search-"))
+def estimate_at_least_one_six(trials=10000):
+    success = 0
+    for _ in range(trials):
+        if 6 in [random.randint(1, 6) for _ in range(10)]:
+            success += 1
+    print(f"Probability of at least one 6 in 10 rolls: {success/trials}")
 
-        if emp_id in employees:
-...             info = employees[emp_id]
-...             print(f"\n Details of Employee ID {emp_id}:")
-...             print(f"Name: {info['name']}")
-...             print(f"Age: {info['age']}")
-...             print(f"Department: {info['department']}")
-...             print(f"Salary: {info['salary']}\n")
-...         else:
-...             print("Employee not found!")
-...     except ValueError:
-...         print("Invalid Value. Please enter numeric value")
-... 
-...         
-... def main_menu():
-...     while True:
-...         print("===Employee Management System===")
-...         print("1. Add Employee")
-...         print("2. View all Employees")
-...         print("3. Search for Employee")
-...         print("4. Exit")
-...         
-...         choice = input("Enter your choice (1-4): ")
-... 
-...         if choice == '1':
-...             print("Add employee selected.")
-...             add_employee()
-...         elif choice == '2':
-...             print("View all employees selected.")
-...             view_employees()
-...         elif choice == '3':
-...             print("Search for employee selected.")
-...             search_employees()
-...         elif choice == '4':
-...             print("Thank you for using EMS!")
-...             break
-...         else:
-...             print ("Invalid Input. Please try again!\n")
-... 
-... main_menu()
-... 
+estimate_at_least_one_six()
+
+#Rolls the dice 10 times for each trial and checks if at least one out of all roll is 6.
+
+
+def simulate_ball_draws(trials=1000):
+    colors = ['red']*5 + ['green']*7 + ['blue']*8
+    previous_color = None
+    blue_then_red = 0
+    total_after_blue = 0
+
+    for _ in range(trials):
+        current = random.choice(colors)
+        if previous_color == 'blue':
+            total_after_blue += 1
+            if current == 'red':
+                blue_then_red += 1
+        previous_color = current
+
+    if total_after_blue > 0:
+        conditional_prob = blue_then_red / total_after_blue
+        print(f"P(Red | Previous was Blue): {conditional_prob}")
+    else:
+        print("Not enough data for conditional probability")
+
+simulate_ball_draws()
+
+#This will simulate drawing a ball and putting it back 1000 times, tracking when a red ball follows a blue one.
+
+
+import numpy as np
+
+def discrete_rv_stats():
+    sample = np.random.choice([1, 2, 3], size=1000, p=[0.25, 0.35, 0.4])
+    mean = np.mean(sample)
+    variance = np.var(sample)
+    std_dev = np.std(sample)
+    print(f"Mean: {mean}, Variance: {variance}, Standard Deviation: {std_dev}")
+
+discrete_rv_stats()
+
+# We will generate 1000 random values from a custom discrete distribution and calculate statistical properties.
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def exponential_distribution_sim():
+    data = np.random.exponential(scale=5, size=2000)
+    sns.histplot(data, kde=True, stat='density', bins=30, color='skyblue')
+    plt.title('Exponential Distribution with PDF Overlay')
+    plt.xlabel('Value')
+    plt.ylabel('Density')
+    plt.show()
+
+exponential_distribution_sim()
+
+#Simulates 2000 samples from an exponential distribution and overlays a probability density function on the histogram.
+
+
+
+def simulate_clt():
+    uniform_data = np.random.uniform(0, 1, 10000)
+    sample_means = [np.mean(np.random.choice(uniform_data, size=30)) for _ in range(1000)]
+
+    # plot original uniform distribution
+    plt.subplot(1, 2, 1)
+    sns.histplot(uniform_data, bins=30, color='lightgreen')
+    plt.title('Uniform Distribution')
+
+    # plot distribution of sample means
+    plt.subplot(1, 2, 2)
+    sns.histplot(sample_means, bins=30, color='orange', kde=True)
+    plt.title('Distribution of Sample Means (CLT)')
+
+    plt.tight_layout()
+    plt.show()
+
+simulate_clt()
+
+#this will show how the distribution of sample means approaches normal distribution (i.e. bell curve), even when the original data is uniform.
+
