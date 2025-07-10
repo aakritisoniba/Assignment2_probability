@@ -1,0 +1,86 @@
+def add_employee():
+    global employees
+    try:
+        emp_id = int(input("Enter Employee ID: "))
+        if emp_id in employees:
+            print ("Employee ID already exists. Enter another value.\n")
+            return
+
+        name= input("Enter Name: ").strip()
+        age= int(input("Enter Age: "))
+        department= input("Enter Department: ").strip()
+        salary= float(input("Enter Salary: "))
+
+        employees[emp_id]= {
+            'name': name,
+            'age': age,
+            'department' : department,
+            'salary' : salary
+        }
+
+        print(f" Employee '{name}' added successfully.\n")
+    except ValueError:
+        print ("Invalid Input, please enter correct values")
+
+
+def view_employees():
+    global employees
+    if not employees:
+        print("No employees available.|N")
+        return
+
+    print("\n{:<10} {:<15} {:<5} {:<15} {:<10}".format('ID', 'Name', 'Age', 'Department', 'Salary'))
+    print("-" * 60)
+
+    for emp_id, info in employees.items():
+        print("{:<10} {:<15} {:<5} {:<15} {:<10}".format(
+            emp_id, info['name'], info['age'], info['department'], info['salary']))
+
+        print()
+
+        
+def search_employees():
+    global employees
+    try:
+        emp_id = int(input("Enter Employee ID to search-"))
+
+        if emp_id in employees:
+...             info = employees[emp_id]
+...             print(f"\n Details of Employee ID {emp_id}:")
+...             print(f"Name: {info['name']}")
+...             print(f"Age: {info['age']}")
+...             print(f"Department: {info['department']}")
+...             print(f"Salary: {info['salary']}\n")
+...         else:
+...             print("Employee not found!")
+...     except ValueError:
+...         print("Invalid Value. Please enter numeric value")
+... 
+...         
+... def main_menu():
+...     while True:
+...         print("===Employee Management System===")
+...         print("1. Add Employee")
+...         print("2. View all Employees")
+...         print("3. Search for Employee")
+...         print("4. Exit")
+...         
+...         choice = input("Enter your choice (1-4): ")
+... 
+...         if choice == '1':
+...             print("Add employee selected.")
+...             add_employee()
+...         elif choice == '2':
+...             print("View all employees selected.")
+...             view_employees()
+...         elif choice == '3':
+...             print("Search for employee selected.")
+...             search_employees()
+...         elif choice == '4':
+...             print("Thank you for using EMS!")
+...             break
+...         else:
+...             print ("Invalid Input. Please try again!\n")
+... 
+... main_menu()
+... 
